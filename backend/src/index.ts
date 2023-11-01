@@ -1,62 +1,38 @@
-const express = require('express');
-const mongoose = require('mongoose');
+import express, { Express } from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import eventRoutes from './routes/eventRoutes';
+import dotenv from 'dotenv';
 
-const app = express();
+dotenv.config();
+
+const app: Express = express();
 
 app.use(express.json());
+app.use(cors());
 
-const port = 3000;
+app.use('/', eventRoutes);
 
-const Events = mongoose.model('Event', {
-	title: String,
-	description: String,
-	image_url: String,
-	selected_date: String,
+const port: number = 3000;
+const dbURI: string | undefined = process.env.MONGODB_URI;
+
+if (!dbURI) {
+	throw new Error(
+		'A variável do ambiente MONGODB_URI não está definida ou correta no arquivo .env'
+	);
+}
+
+mongoose.connect(dbURI);
+
+const dbConnection = mongoose.connection;
+
+dbConnection.on('error', (error: Error) => {
+	console.error('Erro ao conectar no banco DB:', error);
 });
 
-app.get('/', async (request, response) => {
-	const events = await Events.find();
-
-	return response.send(events);
-});
-
-app.post('/', async (req, res) => {
-	const event = new Events({
-		title: req.body.title,
-		description: req.body.description,
-		image_url: req.body.image_url,
-		selected_date: req.body.selected_date,
+dbConnection.once('open', () => {
+	console.log('MongoDB conectado');
+	app.listen(port, () => {
+		console.log(`App rodando na porta: ${port}}`);
 	});
-	await event.save();
-
-	return res.send(event);
-});
-
-app.delete('/:id', async (req, res) => {
-	const eventsDelete = await Events.findByIdAndDelete(req.params.id);
-	return res.send(eventsDelete);
-});
-
-app.put('/:id', async (req, res) => {
-	const eventsUpdate = await Events.findByIdAndUpdate(
-		req.params.id,
-		{
-			title: req.body.title,
-			description: req.body.description,
-			image_url: req.body.image_url,
-			selected_date: req.body.selected_date,
-		},
-		{
-			new: true,
-		}
-	);
-	return res.send(eventsUpdate);
-});
-
-app.listen(port, () => {
-	mongoose.connect(
-		'mongodb+srv://devneto02:p84ZT7CbfLrQWUbE@eventapi.fpz4kuw.mongodb.net/?retryWrites=true&w=majority'
-	);
-
-	console.log('App running');
 });
