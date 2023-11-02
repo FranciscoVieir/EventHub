@@ -18,6 +18,7 @@ function EventListCard() {
     async function fetchEvents() {
       try {
         const eventData = await getAllEvents();
+        // console.log(eventData);
         setEvents(eventData);
       } catch (error) {
         console.error('Erro ao buscar eventos:', error);
@@ -38,10 +39,7 @@ function EventListCard() {
       showsVerticalScrollIndicator={false}
       renderItem={({item}) => (
         <View style={styles.card}>
-          <Image
-            source={{uri: 'https://picsum.photos/seed/200/200'}}
-            style={styles.eventImage}
-          />
+          <Image source={{uri: item.image_url}} style={styles.eventImage} />
           <View style={styles.eventInfo}>
             <Text style={styles.eventTitle}>Título: {item.title}</Text>
             <Text style={styles.eventDescription}>

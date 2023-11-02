@@ -1,7 +1,7 @@
 import {IEvent} from '../Interface';
 import axios from 'axios';
 
-const apiUrl = 'http:/192.168.0.104:3000';
+const apiUrl = 'http:/192.168.0.103:3000';
 
 export const getAllEvents = async (): Promise<IEvent[]> => {
   try {
