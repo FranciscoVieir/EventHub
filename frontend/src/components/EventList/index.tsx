@@ -6,40 +6,69 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
-import {getAllEvents} from '../../services/eventServices';
+import {deleteEvent, getAllEvents} from '../../services/eventServices';
 import {IEvent} from '../../Interface';
 
 function EventListCard() {
   const [events, setEvents] = useState<IEvent[]>([]);
 
   useEffect(() => {
-    async function fetchEvents() {
-      try {
-        const eventData = await getAllEvents();
-        // console.log(eventData);
-        setEvents(eventData);
-      } catch (error) {
-        console.error('Erro ao buscar eventos:', error);
-      }
-    }
-
     fetchEvents();
   }, []);
 
-  const handleDelete = () => {
-    console.log('Apaguei');
+  const fetchEvents = async () => {
+    try {
+      const eventData = await getAllEvents();
+      setEvents(eventData);
+    } catch (error) {
+      console.error('Erro ao buscar eventos:', error);
+    }
+  };
+
+  const handleDelete = async (eventId: string) => {
+    Alert.alert(
+      'Excluir Evento',
+      'Tem certeza de que deseja excluir este evento?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Excluir',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteEvent(eventId);
+              await fetchEvents();
+              console.log('Evento excluído com sucesso.');
+            } catch (error) {
+              console.error('Erro ao excluir o evento:', error);
+            }
+          },
+        },
+      ],
+    );
   };
 
   return (
     <FlatList
       data={events}
-      keyExtractor={item => item.id}
+      keyExtractor={item => item._id}
       showsVerticalScrollIndicator={false}
       renderItem={({item}) => (
         <View style={styles.card}>
-          <Image source={{uri: item.image_url}} style={styles.eventImage} />
+          <Image
+            source={
+              item.withImage
+                ? {uri: item.image_url}
+                : require('../../assets/desconhecido.png')
+            }
+            style={styles.eventImage}
+          />
           <View style={styles.eventInfo}>
             <Text style={styles.eventTitle}>Título: {item.title}</Text>
             <Text style={styles.eventDescription}>
@@ -47,7 +76,9 @@ function EventListCard() {
             </Text>
             <Text style={styles.eventDate}>Data: {item.selected_date}</Text>
           </View>
-          <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => handleDelete(item._id)}>
             <Image
               source={require('../../assets/trash.png')}
               style={styles.trashIcon}

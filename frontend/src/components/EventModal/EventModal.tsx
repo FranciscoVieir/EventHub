@@ -56,9 +56,7 @@ const EventModal: React.FC<EventModalProps> = ({
     const eventData = {
       title: title,
       description: description,
-      image_url: isWithImage
-        ? randomImage
-        : require('../../assets/desconhecido.png'),
+      image_url: randomImage,
       selected_date: date,
       withImage: isWithImage,
     };
@@ -72,6 +70,11 @@ const EventModal: React.FC<EventModalProps> = ({
       });
 
     cleanAllInputs();
+  }
+
+  async function closeModalButton() {
+    // await ;
+    toggleModal();
   }
 
   return (
@@ -104,7 +107,7 @@ const EventModal: React.FC<EventModalProps> = ({
           onPress={handleCreateChange}>
           <Text style={styles.createButtonText}>Criar evento</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
+        <TouchableOpacity style={styles.closeButton} onPress={closeModalButton}>
           <Text style={styles.closeButtonText}>Fechar</Text>
         </TouchableOpacity>
       </View>
