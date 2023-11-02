@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {CheckBox} from 'react-native-elements';
 import Modal from 'react-native-modal';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import {createEvent} from '../../services/eventServices';
 
@@ -25,9 +26,10 @@ function EventModal({
 }: EventModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState('25/07/2021');
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [isWithImage, setIsWithImage] = useState(false);
   const [randomImage, setRandomImage] = useState('');
+  const [isPickerVisible, setPickerVisible] = useState(false);
 
   useEffect(() => {
     const fetchRandomImage = async () => {
@@ -46,11 +48,10 @@ function EventModal({
     setDescription('');
     setIsWithImage(false);
     setRandomImage('');
-    // setDate('');
   }
 
   function handleCreateChange() {
-    if (title === '' || description === '' || date === '') {
+    if (title === '' || description === '') {
       Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios.');
       return;
     }
@@ -59,7 +60,7 @@ function EventModal({
       title: title,
       description: description,
       image_url: randomImage,
-      selected_date: date,
+      selected_date: selectedDate.toISOString(),
       withImage: isWithImage,
     };
 
@@ -67,6 +68,7 @@ function EventModal({
       .then(response => {
         console.log('Evento criado com sucesso:', response);
         fetchEvents();
+        console.log(eventData.selected_date, 'dateselected');
       })
       .catch(error => {
         console.error('Erro ao criar o evento:', error);
@@ -83,13 +85,36 @@ function EventModal({
           style={styles.input}
           value={title}
           onChangeText={text => setTitle(text)}
+          placeholder="Título"
         />
         <TextInput
           style={styles.input}
           value={description}
           onChangeText={text => setDescription(text)}
+          placeholder="Descrição"
         />
         <Text style={styles.modalLabel}>Selecione a data:</Text>
+        <TouchableOpacity
+          onPress={() => setPickerVisible(true)}
+          style={styles.datePickerButton}>
+          <Text>Selecionar data</Text>
+        </TouchableOpacity>
+
+        {isPickerVisible && (
+          <DateTimePicker
+            style={styles.datePicker}
+            value={selectedDate}
+            mode="date"
+            display="default"
+            minimumDate={new Date()}
+            onChange={(event, date) => {
+              if (event.type === 'set') {
+                setSelectedDate(date || selectedDate);
+              }
+              setPickerVisible(false);
+            }}
+          />
+        )}
 
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
@@ -99,7 +124,6 @@ function EventModal({
             <Text style={styles.checkboxText}>Adicionar foto</Text>
           </TouchableOpacity>
         </View>
-
         <TouchableOpacity
           style={styles.createButton}
           onPress={handleCreateChange}>
@@ -135,6 +159,17 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
+  datePickerButton: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginVertical: 10,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  datePicker: {
+    display: 'none',
+  },
   checkboxContainer: {
     alignItems: 'center',
     marginVertical: 10,
@@ -151,14 +186,14 @@ const styles = StyleSheet.create({
   checkboxText: {
     fontSize: 17,
   },
-  addButton: {
-    backgroundColor: '#007BFF',
+  createButton: {
+    backgroundColor: 'green',
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
     marginVertical: 10,
   },
-  addButtonText: {
+  createButtonText: {
     color: 'white',
     fontSize: 16,
   },
@@ -170,17 +205,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   closeButtonText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  createButton: {
-    backgroundColor: 'green',
-    padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginVertical: 1,
-  },
-  createButtonText: {
     color: 'white',
     fontSize: 16,
   },
