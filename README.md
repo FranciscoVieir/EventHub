@@ -38,34 +38,28 @@
   <br>
   <img src="./frontend//src/assets/screenshot6.png" alt="Screenshot 6" width="300">
   <br>
-  <br>
-  <img src="./frontend//src/assets/screenshot7.png" alt="Screenshot 7" width="300">
-  <br>
-  <br>
-  <img src="./frontend//src/assets/screenshot8.png" alt="Screenshot 8" width="300">
-  <br>
 
-## How to Use
+## Como usar
 
-### Clone the repository to your local machine:
+### Clone o repositório na sua máquina local:
 
 ```bash
 git clone git@github.com:FranciscoVieir/EventHub.git
 ```
 
-### Access the folder
+### Como acessar a pasta:
 
 ```bash
 cd eventMobileApp
 ```
 
-## Install dependencies:
+## Instalando as dependências:
 
 ```bash
 npm install
 ```
 
-#### or
+#### ou
 
 ```bash
 yarn start
