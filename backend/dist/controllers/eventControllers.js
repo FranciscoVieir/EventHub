@@ -40,6 +40,7 @@ const createEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             description: req.body.description,
             image_url: req.body.image_url,
             selected_date: req.body.selected_date,
+            withImage: req.body.withImage,
         });
         yield event.save();
         return res.status(201).json(event);
@@ -70,6 +71,7 @@ const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             description: req.body.description,
             image_url: req.body.image_url,
             selected_date: req.body.selected_date,
+            withImage: req.body.withImage,
         }, {
             new: true,
         });

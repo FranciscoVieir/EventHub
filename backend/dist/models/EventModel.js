@@ -29,6 +29,7 @@ const eventSchema = new mongoose_1.Schema({
     description: String,
     image_url: String,
     selected_date: String,
+    withImage: Boolean,
 });
 const Event = mongoose_1.default.model('Event', eventSchema);
 exports.default = Event;

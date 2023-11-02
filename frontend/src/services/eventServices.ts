@@ -1,7 +1,7 @@
 import {IEvent} from '../Interface';
 import axios from 'axios';
 
-const apiUrl = 'http:/192.168.0.103:3000';
+const apiUrl = 'http://192.168.0.103:3000';
 
 export const getAllEvents = async (): Promise<IEvent[]> => {
   try {
@@ -16,6 +16,7 @@ export const createEvent = async (eventData: IEvent): Promise<IEvent> => {
   const response = await axios.post(`${apiUrl}/events`, eventData, {
     headers: {
       'Content-Type': 'application/json',
+      body: JSON.stringify(eventData),
     },
   });
   return response.data;

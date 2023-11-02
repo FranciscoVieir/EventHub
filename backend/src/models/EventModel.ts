@@ -5,6 +5,7 @@ export interface IEvent extends Document {
 	description: string;
 	image_url: string;
 	selected_date: string;
+	withImage: boolean;
 }
 
 const eventSchema: Schema<IEvent> = new Schema({
@@ -12,6 +13,7 @@ const eventSchema: Schema<IEvent> = new Schema({
 	description: String,
 	image_url: String,
 	selected_date: String,
+	withImage: Boolean,
 });
 
 const Event: Model<IEvent> = mongoose.model<IEvent>('Event', eventSchema);

@@ -28,6 +28,7 @@ export const createEvent = async (req: Request, res: Response) => {
 			description: req.body.description,
 			image_url: req.body.image_url,
 			selected_date: req.body.selected_date,
+			withImage: req.body.withImage,
 		});
 		await event.save();
 		return res.status(201).json(event);
@@ -58,6 +59,7 @@ export const updateEvent = async (req: Request, res: Response) => {
 				description: req.body.description,
 				image_url: req.body.image_url,
 				selected_date: req.body.selected_date,
+				withImage: req.body.withImage,
 			},
 			{
 				new: true,

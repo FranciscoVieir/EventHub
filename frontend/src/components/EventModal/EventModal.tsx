@@ -1,47 +1,107 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   TextInput,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {CheckBox} from 'react-native-elements';
 import Modal from 'react-native-modal';
 
-const EventModal = ({isModalVisible, toggleModal}) => {
-  const [newEvent, setNewEvent] = useState({
-    title: 'Título Estático',
-    description: 'Descrição Estática',
-    date: '01-11-2023',
-    withImage: true,
-  });
+import {createEvent} from '../../services/eventServices';
 
-  const toggleImage = () => {
-    setNewEvent({...newEvent, withImage: !newEvent.withImage});
-  };
+interface EventModalProps {
+  isModalVisible: boolean;
+  toggleModal: () => void;
+}
+
+const EventModal: React.FC<EventModalProps> = ({
+  isModalVisible,
+  toggleModal,
+}) => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('25/07/2021');
+  const [isWithImage, setIsWithImage] = useState(false);
+  const [randomImage, setRandomImage] = useState('');
+
+  useEffect(() => {
+    const fetchRandomImage = async () => {
+      try {
+        const response = await fetch('https://picsum.photos/200/300');
+        setRandomImage(response.url);
+      } catch (error) {
+        console.error('Erro ao buscar imagem aleatória:', error);
+      }
+    };
+    fetchRandomImage();
+  }, [isWithImage]);
+
+  function cleanAllInputs() {
+    setTitle('');
+    setDescription('');
+    setIsWithImage(false);
+    setRandomImage('');
+    // setDate('');
+  }
+
+  function handleCreateChange() {
+    if (title === '' || description === '' || date === '') {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    const eventData = {
+      title: title,
+      description: description,
+      image_url: isWithImage
+        ? randomImage
+        : require('../../assets/desconhecido.png'),
+      selected_date: date,
+      withImage: isWithImage,
+    };
+
+    createEvent(eventData)
+      .then(response => {
+        console.log('Evento criado com sucesso:', response);
+      })
+      .catch(error => {
+        console.error('Erro ao criar o evento:', error);
+      });
+
+    cleanAllInputs();
+  }
 
   return (
     <Modal isVisible={isModalVisible}>
       <View style={styles.modalContainer}>
         <Text style={styles.modalTitle}>Novo Evento</Text>
-        <TextInput style={styles.input} value={newEvent.title} />
-        <TextInput style={styles.input} value={newEvent.description} />
+        <TextInput
+          style={styles.input}
+          value={title}
+          onChangeText={text => setTitle(text)}
+        />
+        <TextInput
+          style={styles.input}
+          value={description}
+          onChangeText={text => setDescription(text)}
+        />
         <Text style={styles.modalLabel}>Selecione a data:</Text>
 
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
             style={styles.checkboxTextContainer}
-            onPress={toggleImage}>
-            <CheckBox
-              checked={newEvent.withImage}
-              containerStyle={styles.checkbox}
-            />
+            onPress={() => setIsWithImage(!isWithImage)}>
+            <CheckBox checked={isWithImage} containerStyle={styles.checkbox} />
             <Text style={styles.checkboxText}>Adicionar foto</Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.createButton}>
+        <TouchableOpacity
+          style={styles.createButton}
+          onPress={handleCreateChange}>
           <Text style={styles.createButtonText}>Criar evento</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
