@@ -13,6 +13,8 @@ import {deleteEvent} from '../../services/eventServices';
 import formatDate from '../../fortmatDate';
 import {IEvent} from '../../Interface';
 
+import EmptyListComponent from '../EmptyListComponent';
+
 interface EventListCardProps {
   events: IEvent[];
   fetchEvents: () => void;
@@ -50,6 +52,7 @@ function EventListCard({events, fetchEvents}: EventListCardProps) {
       data={events}
       keyExtractor={item => item._id || item.description}
       showsVerticalScrollIndicator={false}
+      ListEmptyComponent={EmptyListComponent}
       renderItem={({item}) => (
         <View style={styles.card}>
           <Image

@@ -140,7 +140,7 @@ function EventModal({
 const styles = StyleSheet.create({
   modalContainer: {
     backgroundColor: 'white',
-    padding: 20,
+    padding: 17,
     borderRadius: 10,
   },
   modalTitle: {
@@ -181,10 +181,11 @@ const styles = StyleSheet.create({
   checkbox: {
     backgroundColor: 'transparent',
     borderWidth: 0,
-    marginLeft: 10,
+    marginLeft: -14,
   },
   checkboxText: {
     fontSize: 17,
+    marginLeft: -16,
   },
   createButton: {
     backgroundColor: 'green',
