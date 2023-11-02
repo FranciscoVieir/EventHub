@@ -7,13 +7,12 @@ export const getAllEvents = async (req: Request, res: Response) => {
 
 		events.sort((a, b) => {
 			const dateA = new Date(a.selected_date).getTime();
-			// console.log(dateA, 'DATEA by selecteddate');
 			const dateB = new Date(b.selected_date).getTime();
-			// console.log(dateB, 'DATEB by selecteddate');
 			return dateA - dateB;
 		});
 
 		return res.json(events);
+		// return console.log(events[0].selected_date);
 	} catch (error) {
 		return res
 			.status(500)

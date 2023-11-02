@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import {deleteEvent} from '../../services/eventServices';
+import formatDate from '../../fortmatDate';
 import {IEvent} from '../../Interface';
 
 interface EventListCardProps {
@@ -64,7 +65,9 @@ function EventListCard({events, fetchEvents}: EventListCardProps) {
             <Text style={styles.eventDescription}>
               Descrição: {item.description}
             </Text>
-            <Text style={styles.eventDate}>Data: {item.selected_date}</Text>
+            <Text style={styles.eventDate}>
+              Data: {formatDate(item.selected_date)}
+            </Text>
           </View>
           <TouchableOpacity
             style={styles.deleteButton}
