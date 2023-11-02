@@ -21,13 +21,28 @@
 
 ### Screenshot:
 
-  <img src="./src/assets/screenshot1.png" alt="Screenshot 1" width="300">
+  <img src="./frontend//src/assets/screenshot1.png" alt="Screenshot 1" width="300">
   <br>
   <br>
-  <img src="./src/assets/screenshot2.png" alt="Screenshot 2" width="300">
+  <img src="./frontend//src/assets/screenshot2.png" alt="Screenshot 2" width="300">
   <br>
   <br>
-  <img src="./src/assets/screenshot3.png" alt="Screenshot 3" width="300">
+  <img src="./frontend//src/assets/screenshot3.png" alt="Screenshot 3" width="300">
+  <br>
+  <br>
+  <img src="./frontend//src/assets/screenshot4.png" alt="Screenshot 4" width="300">
+  <br>
+  <br>
+  <img src="./frontend//src/assets/screenshot5.png" alt="Screenshot 5" width="300">
+  <br>
+  <br>
+  <img src="./frontend//src/assets/screenshot6.png" alt="Screenshot 6" width="300">
+  <br>
+  <br>
+  <img src="./frontend//src/assets/screenshot7.png" alt="Screenshot 7" width="300">
+  <br>
+  <br>
+  <img src="./frontend//src/assets/screenshot8.png" alt="Screenshot 8" width="300">
   <br>
 
 ## How to Use
