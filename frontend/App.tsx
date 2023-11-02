@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -34,6 +35,7 @@ function App() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Lista de Eventos</Text>
       </View>
