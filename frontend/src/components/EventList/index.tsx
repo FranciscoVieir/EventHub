@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -9,25 +9,15 @@ import {
   Alert,
 } from 'react-native';
 
-import {deleteEvent, getAllEvents} from '../../services/eventServices';
+import {deleteEvent} from '../../services/eventServices';
 import {IEvent} from '../../Interface';
 
-function EventListCard() {
-  const [events, setEvents] = useState<IEvent[]>([]);
+interface EventListCardProps {
+  events: IEvent[];
+  fetchEvents: () => void;
+}
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
-    try {
-      const eventData = await getAllEvents();
-      setEvents(eventData);
-    } catch (error) {
-      console.error('Erro ao buscar eventos:', error);
-    }
-  };
-
+function EventListCard({events, fetchEvents}: EventListCardProps) {
   const handleDelete = async (eventId: string) => {
     Alert.alert(
       'Excluir Evento',
@@ -57,7 +47,7 @@ function EventListCard() {
   return (
     <FlatList
       data={events}
-      keyExtractor={item => item._id}
+      keyExtractor={item => item._id || item.description}
       showsVerticalScrollIndicator={false}
       renderItem={({item}) => (
         <View style={styles.card}>
@@ -78,7 +68,7 @@ function EventListCard() {
           </View>
           <TouchableOpacity
             style={styles.deleteButton}
-            onPress={() => handleDelete(item._id)}>
+            onPress={() => item._id && handleDelete(item._id)}>
             <Image
               source={require('../../assets/trash.png')}
               style={styles.trashIcon}

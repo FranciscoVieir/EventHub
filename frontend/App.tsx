@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,12 +8,28 @@ import {
 } from 'react-native';
 import EventModal from './src/components/EventModal/EventModal';
 import EventListCard from './src/components/EventList';
+import {IEvent} from './src/Interface';
+import {getAllEvents} from './src/services/eventServices';
 
-const App: React.FC = () => {
+function App() {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [events, setEvents] = useState<IEvent[]>([]);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      const eventData = await getAllEvents();
+      setEvents(eventData);
+    } catch (error) {
+      console.error('Erro ao buscar eventos:', error);
+    }
   };
 
   return (
@@ -21,16 +37,20 @@ const App: React.FC = () => {
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Lista de Eventos</Text>
       </View>
-      <EventModal isModalVisible={isModalVisible} toggleModal={toggleModal} />
+      <EventModal
+        isModalVisible={isModalVisible}
+        toggleModal={toggleModal}
+        fetchEvents={fetchEvents}
+      />
       <View style={styles.eventListContainer}>
-        <EventListCard />
+        <EventListCard events={events} fetchEvents={fetchEvents} />
       </View>
       <TouchableOpacity style={styles.addButton} onPress={toggleModal}>
         <Text style={styles.addButtonText}>Adicionar um novo evento</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

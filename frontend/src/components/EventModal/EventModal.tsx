@@ -15,12 +15,14 @@ import {createEvent} from '../../services/eventServices';
 interface EventModalProps {
   isModalVisible: boolean;
   toggleModal: () => void;
+  fetchEvents: () => void;
 }
 
-const EventModal: React.FC<EventModalProps> = ({
+function EventModal({
   isModalVisible,
   toggleModal,
-}) => {
+  fetchEvents,
+}: EventModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('25/07/2021');
@@ -64,17 +66,13 @@ const EventModal: React.FC<EventModalProps> = ({
     createEvent(eventData)
       .then(response => {
         console.log('Evento criado com sucesso:', response);
+        fetchEvents();
       })
       .catch(error => {
         console.error('Erro ao criar o evento:', error);
       });
 
     cleanAllInputs();
-  }
-
-  async function closeModalButton() {
-    // await ;
-    toggleModal();
   }
 
   return (
@@ -107,13 +105,13 @@ const EventModal: React.FC<EventModalProps> = ({
           onPress={handleCreateChange}>
           <Text style={styles.createButtonText}>Criar evento</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.closeButton} onPress={closeModalButton}>
+        <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
           <Text style={styles.closeButtonText}>Fechar</Text>
         </TouchableOpacity>
       </View>
     </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
   modalContainer: {
